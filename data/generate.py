@@ -74,22 +74,21 @@ while True:
         img_b, img_g, img_r, label_x, label_y = from_label_deform(label_x, label_y, img_path, resize_shape_before_deform)
         try:
             img_b, img_g, img_r = texture(label_x, img_b, img_g, img_r, texture_path)
-        except:
+        except Exception:
             continue
 
         # resize image and label
         label_x, label_y, img_b, img_g, img_r = resize_img_label(label_x, label_y, img_b, img_g, img_r, resize_shape_after_deform)
         img = np.dstack([img_b, img_g, img_r])
-        
+
         cv2.imwrite(os.path.join(target_img_folder, file_name) + '.png', img)
 
-        # change label precision to lower the volumn of label npz
+        # change label precision to lower the volumn of label npy
         label_x, label_y = label_x.astype(np.float16), label_y.astype(np.float16)
-        np.savez_compressed(os.path.join(target_label_folder, file_name), x = label_x, y = label_y)
-        
+        np.savez_compressed(os.path.join(target_label_folder, file_name), x=label_x, y=label_y)
+
         print(f'image deformation finished: {file_name + ".png"}, time: {time.time() - start} s')
         count += 1
         if count == numbers:
             print(f'{numbers} images finished')
             exit(0)
-

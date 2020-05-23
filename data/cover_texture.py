@@ -1,7 +1,7 @@
 from cv2 import cv2
 import numpy as np
-import os
-from ctypes import *
+# from ctypes import *  # noqa
+
 
 def texture(label, src_img_b, src_img_g, src_img_r, texture_img_path):
     texture_img = cv2.imread(texture_img_path, cv2.IMREAD_COLOR)
@@ -9,14 +9,15 @@ def texture(label, src_img_b, src_img_g, src_img_r, texture_img_path):
     shape = src_img_b.shape
 
     texture_img_resize = cv2.resize(texture_img, (shape[1], shape[0]))
-    
-    texture_b, texture_g, texture_r = np.zeros(shape), np.zeros(shape), np.zeros(shape)
+
+    texture_b, texture_g, texture_r = np.zeros(
+        shape), np.zeros(shape), np.zeros(shape)
     src_b, src_g, src_r = np.zeros(shape), np.zeros(shape), np.zeros(shape)
     label_for_cover = np.zeros(shape)
 
-    texture_b[:] = texture_img_resize[:,:,0]
-    texture_g[:] = texture_img_resize[:,:,1]
-    texture_r[:] = texture_img_resize[:,:,2]
+    texture_b[:] = texture_img_resize[:, :, 0]
+    texture_g[:] = texture_img_resize[:, :, 1]
+    texture_r[:] = texture_img_resize[:, :, 2]
 
     src_b[:] = src_img_b[:]
     src_g[:] = src_img_g[:]
@@ -48,7 +49,7 @@ def texture(label, src_img_b, src_img_g, src_img_r, texture_img_path):
         np.ctypeslib.ndpointer(dtype=np.int32, ndim=1),
     ]
 
-    c_cover_texture(src_b, src_g, src_r, texture_b, texture_g, texture_r, label_for_cover, shape)
+    c_cover_texture(src_b, src_g, src_r, texture_b, texture_g,
+                    texture_r, label_for_cover, shape)
 
     return src_b, src_g, src_r
-
